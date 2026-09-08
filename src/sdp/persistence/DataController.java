@@ -1,9 +1,12 @@
 package sdp.persistence;
 
 import sdp.content.prinzessins.Prinzessin;
+import sdp.content.gameplay.story.StoryState;
 import sdp.modules.behavior.UsageTrackable;
 import sdp.content.gameplay.inventory.items.Item;
 import sdp.content.gameplay.talk.topics.Topic;
+import sdp.modules.assets.Asset;
+import sdp.modules.assets.AssetResolver;
 import sdp.persistence.persistent.PersistentData;
 import sdp.persistence.persistent.dtos.*;
 import sdp.persistence.runtime.RuntimeData;
@@ -29,10 +32,15 @@ public class DataController {
     private InventoryData inventoryData;
 
     public void initializeSession(String playerName, Prinzessin prinzessinID) {
+        initializeSession(playerName, prinzessinID, StoryState.PROLOGUE);
+    }
+
+    public void initializeSession(String playerName, Prinzessin prinzessinID, StoryState storyState) {
         this.sessionData = new SessionData();
 
         sessionData.setPlayerName(playerName);
         sessionData.setPrinzessinID(prinzessinID);
+        sessionData.setStoryState(storyState);
     }
 
     // Logic
@@ -56,8 +64,13 @@ public class DataController {
     }
 
     public PersistentData toPersistent(){
-        SessionDataDTO sessionDataDTO = new SessionDataDTO(sessionData.getPlayerName(), sessionData.getPrinzessinID());
-        PresentationDataDTO presentationDataDTO = new PresentationDataDTO(presentationData.getCurrentMusic(), presentationData.getCurrentVoice(), presentationData.getCurrentSprite());
+        SessionDataDTO sessionDataDTO = new SessionDataDTO(sessionData.getPlayerName(), sessionData.getPrinzessinID(), sessionData.getStoryState());
+        PresentationDataDTO presentationDataDTO = new PresentationDataDTO(
+            AssetResolver.nameOf(presentationData.getCurrentMusic()),
+            AssetResolver.nameOf(presentationData.getCurrentVoice()),
+            AssetResolver.nameOf(presentationData.getCurrentSprite()),
+            AssetResolver.nameOf(presentationData.getCurrentBackground())
+        );
         StatDataDTO statDataDTO = new StatDataDTO(statData.getInsanity(), statData.getAffection(), statData.getHunger(), statData.getMoney());
 
         List<TopicDataDTO> topicDataDTOs = new ArrayList<>();

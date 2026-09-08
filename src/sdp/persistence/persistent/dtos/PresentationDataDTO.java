@@ -1,5 +1,3 @@
 package sdp.persistence.persistent.dtos;
 
-import sdp.modules.assets.Asset;
-
-public record PresentationDataDTO(Asset currentMusic, Asset currentVoice, Asset currentSprite) {}
+public record PresentationDataDTO(String currentMusic, String currentVoice, String currentSprite, String currentBackground) {}

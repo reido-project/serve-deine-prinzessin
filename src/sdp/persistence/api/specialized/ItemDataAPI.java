@@ -1,4 +1,4 @@
-package sdp.persistence.api;
+package sdp.persistence.api.specialized;
 
 import sdp.shared.exceptions.ItemNotFoundException;
 import sdp.content.gameplay.inventory.items.Item;

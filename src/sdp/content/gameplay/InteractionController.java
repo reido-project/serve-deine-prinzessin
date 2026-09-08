@@ -1,5 +1,6 @@
 package sdp.content.gameplay;
 
+import sdp.content.gameplay.story.StoryController;
 import sdp.content.prinzessins.Prinzessin;
 import sdp.modules.dialogue.Dialogue;
 import sdp.modules.dialogue.DialogueRepository;
@@ -18,7 +19,10 @@ import sdp.content.prinzessins.PrinzessinAttributes;
 
 import java.util.List;
 
+import static sdp.shared.utils.ArrayUtil.addEntries;
+
 public class InteractionController {
+    private final StoryController storyController;
     private final TalkController talkController;
     private final TeaseController teaseController;
     private final InventoryController inventoryController;
@@ -35,7 +39,8 @@ public class InteractionController {
 
         DialogueRepository dialogueRepository = new DialogueRepository(attributes);
 
-        talkController = new TalkController(attributes.getTopics(),dialogueRepository);
+        storyController= new StoryController(attributes.getBackgrounds(), dialogueRepository);
+        talkController = new TalkController(attributes.getTopics(), dialogueRepository);
         teaseController = new TeaseController(dialogueRepository);
         inventoryController = new InventoryController(attributes.getItems(), dialogueRepository);
         feedController = new FeedController(dialogueRepository);
@@ -43,8 +48,12 @@ public class InteractionController {
 
 
     // Logic
+    public Dialogue[] checkStory(){
+        return storyController.checkStory();
+    }
+
     public Dialogue[] talk(TopicID topicID) {
-        return talkController.talk(topicID);
+        return addEntries(talkController.talk(topicID), checkStory());
     }
 
     public Topic[] getDefaultTopics() {
@@ -56,11 +65,11 @@ public class InteractionController {
     }
 
     public Dialogue[] tease(){
-        return teaseController.tease();
+        return addEntries(teaseController.tease(), checkStory());
     }
 
     public Dialogue[] use(ItemID itemID) {
-        return inventoryController.use(itemID);
+        return addEntries(inventoryController.use(itemID), checkStory());
     }
 
     public Item[] resolveInventory(ItemID[] itemIDs) {
@@ -72,6 +81,6 @@ public class InteractionController {
     }
 
     public Dialogue[] feed(){
-        return feedController.feed();
+        return addEntries(feedController.feed(), checkStory());
     }
 }

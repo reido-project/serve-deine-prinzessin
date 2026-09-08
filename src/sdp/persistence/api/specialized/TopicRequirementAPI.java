@@ -1,4 +1,4 @@
-package sdp.persistence.api;
+package sdp.persistence.api.specialized;
 
 import sdp.persistence.DataController;
 

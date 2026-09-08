@@ -1,35 +1,46 @@
-package sdp.persistence;
+package sdp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import sdp.Config;
-import sdp.GameController;
 import sdp.content.gameplay.InteractionController;
 import sdp.content.gameplay.inventory.items.Item;
+import sdp.content.gameplay.talk.requirements.TopicRequirement;
 import sdp.content.gameplay.talk.topics.Topic;
 import sdp.content.stats.Stat;
+import sdp.persistence.DataController;
+import sdp.persistence.runtime.data.PresentationData;
+import sdp.shared.dtos.initialization.PrinzessinOption;
 import sdp.shared.dtos.initialization.SessionContextDTO;
 import sdp.content.prinzessins.Prinzessin;
+import sdp.content.prinzessins.PrinzessinAttributes;
+import sdp.content.gameplay.story.StoryState;
+import sdp.content.prinzessins.kyoko.assets.config.KyokoSpriteConfig;
+import sdp.content.stats.AffectionType;
+import sdp.content.stats.StatParser;
+import sdp.modules.assets.Asset;
+import sdp.modules.assets.AssetCategory;
+import sdp.modules.assets.AssetResolver;
+import sdp.modules.audio.AudioController;
 import sdp.persistence.persistent.PersistentData;
 import sdp.persistence.persistent.dtos.*;
 import sdp.persistence.runtime.RuntimeData;
 import sdp.shared.dtos.inventory.InventoryEntry;
+import sdp.shared.dtos.presentation.PresentationRefreshDTO;
 import sdp.shared.dtos.talk.TopicEntry;
 import sdp.shared.utils.EncryptionUtil;
 import sdp.shared.utils.ImageUtil;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.image.BufferedImage;
 
 public class SessionController {
     private final DataController dataController = DataController.getInstance();
-    private final GameController gameController = GameController.getInstance();
     private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
 
@@ -38,8 +49,18 @@ public class SessionController {
         return new Stat();
     }
 
-    public BufferedImage refreshSprite(){
-        return ImageUtil.loadImage(dataController.getPresentationData().getCurrentSprite().getDirectory());
+    public PresentationRefreshDTO refreshPresentation(){
+        PresentationData data = dataController.getPresentationData();
+        BufferedImage background = data.getCurrentBackground() == null
+            ? null
+            : ImageUtil.loadImage(data.getCurrentBackground().getDirectory());
+        BufferedImage sprite = data.getCurrentSprite() == null
+            ? null
+            : ImageUtil.loadImage(data.getCurrentSprite().getDirectory());
+        return new PresentationRefreshDTO(
+            background,
+            sprite
+        );
     }
 
     public InventoryEntry[] refreshInventory(){
@@ -47,32 +68,80 @@ public class SessionController {
         List<Item> inventory = dataController.getInventoryData().getInventory();
 
         for(Item item : inventory){
-            inventoryEntries.add(new InventoryEntry(item.getTitle(), item.getDescription(), item.getId()));
+            inventoryEntries.add(new InventoryEntry(item.getTitle(), item.getDescription(), item.getId(), item.getType()));
         }
         return inventoryEntries.toArray(new InventoryEntry[0]);
+    }
+
+    public void restoreDefaultSprite() {
+        if (dataController.getSessionData() == null || dataController.getSessionData().getPrinzessinID() == null) {
+            return;
+        }
+
+        Prinzessin prinzessin = dataController.getSessionData().getPrinzessinID();
+        Asset defaultSprite;
+
+        if (prinzessin == Prinzessin.KYOKO) {
+            AffectionType affection = StatParser.getAffection();
+            defaultSprite = KyokoSpriteConfig.resolveDefaultSprite(affection);
+        } else {
+            defaultSprite = prinzessin.getInitialSprite();
+        }
+
+        if (defaultSprite != null) {
+            dataController.getPresentationData().setCurrentSprite(defaultSprite);
+        }
     }
 
     public TopicEntry[] refreshTopics(){
         List<TopicEntry> topicEntries = new ArrayList<>();
         List<Topic> topics = dataController.getTopicData().getTopics();
+
         for(Topic topic : topics){
-            topicEntries.add(new TopicEntry(topic.getTopic(), topic.getId()));
+            TopicRequirement requirement = topic.getRequirement();
+            if(requirement == null){
+                topic.setVisibleTrue();
+            }
+            else{
+                topic.setVisible(requirement.check());
+            }
+
+            if(topic.isVisible()){
+                topicEntries.add(new TopicEntry(topic.getTopic(), topic.getId()));
+            }
         }
         return topicEntries.toArray(new TopicEntry[0]);
     }
 
     // Create / Write Session
+    public PrinzessinOption[] getPrinzessinOptions(){
+        List<PrinzessinOption> prinzessinOptions = new ArrayList<>();
+        Prinzessin[] prinzessins = Prinzessin.values();
+
+        for(Prinzessin prinzessin : prinzessins){
+            prinzessinOptions.add(new PrinzessinOption(prinzessin, prinzessin.getFullName(), ImageUtil.loadImage(prinzessin.getSelectSprite())));
+        }
+
+        return prinzessinOptions.toArray(new PrinzessinOption[0]);
+    }
+
     public void initializeNewGame(SessionContextDTO context){
         Prinzessin prinzessin = context.prinzessinID();
 
         dataController.initializeSession(context.playerName(), prinzessin);
-        InteractionController interaction = gameController.getInteractionController();
+        GameController.getInstance().resetInstance();
+        InteractionController interaction = GameController.getInstance().getInteractionController();
 
         dataController.loadRuntimeData(
             new RuntimeData(
+                null, null, prinzessin.getInitialSprite(),
                 prinzessin.getInsanity(), prinzessin.getAffection(), prinzessin.getHunger(), prinzessin.getMoney(),
                 interaction.getDefaultTopics(), interaction.resolveInventory(prinzessin.getItems())
             )
+        );
+
+        dataController.getPresentationData().setCurrentBackground(
+            new PrinzessinAttributes(prinzessin).getBackgrounds().get(StoryState.PROLOGUE)
         );
     }
 
@@ -148,17 +217,35 @@ public class SessionController {
             PresentationDataDTO presentationData = data.getPresentationData();
             StatDataDTO statData = data.getStatData();
 
-            dataController.initializeSession(sessionData.playerName(), sessionData.prinzessinID());
+            dataController.initializeSession(
+                sessionData.playerName(),
+                sessionData.prinzessinID(),
+                sessionData.storyState()
+            );
 
-            gameController.resetInstance();
-            InteractionController interaction = gameController.getInteractionController();
+            GameController.getInstance().resetInstance();
+            InteractionController interaction = GameController.getInstance().getInteractionController();
+
+            Asset savedMusic = AssetResolver.resolve(
+                sessionData.prinzessinID(), AssetCategory.MUSIC, presentationData.currentMusic()
+            );
 
             dataController.loadRuntimeData(new RuntimeData(
-                presentationData.currentMusic(), presentationData.currentVoice(), presentationData.currentSprite(),
+                savedMusic,
+                AssetResolver.resolve(sessionData.prinzessinID(), AssetCategory.VOICE, presentationData.currentVoice()),
+                AssetResolver.resolve(sessionData.prinzessinID(), AssetCategory.SPRITE, presentationData.currentSprite()),
                 statData.insanity(), statData.affection(), statData.hunger(), statData.money(),
                 interaction.resolveTopic(data.getTopicData()),
                 interaction.resolveInventory(data.getInventoryData())
             ));
+            dataController.getPresentationData().setCurrentBackground(
+                AssetResolver.resolve(sessionData.prinzessinID(), AssetCategory.BACKGROUND, presentationData.currentBackground())
+            );
+
+            AudioController.stopMusic();
+            if (savedMusic != null) {
+                AudioController.playMusic(savedMusic);
+            }
         } catch (Exception e) {
             throw new RuntimeException("Failed to load game.", e);
         }

@@ -1,25 +1,25 @@
 package sdp.content.gameplay.talk.topics;
 
 import sdp.content.gameplay.talk.behaviors.TopicBehavior;
-import sdp.modules.requirement.Requirement;
+import sdp.content.gameplay.talk.requirements.TopicRequirement;
 
 public class Topic{
     private final TopicID id;
     private final String topic;
-    private final Requirement requirement;
+    private final TopicRequirement requirement;
     private final TopicBehavior behavior;
 
     boolean visible = false;
     boolean exhausted = false;
 
-    public Topic(TopicID id, String topic, Requirement requirement, TopicBehavior behavior) {
+    public Topic(TopicID id, String topic, TopicRequirement requirement, TopicBehavior behavior) {
         this.id = id;
         this.topic = topic;
         this.requirement = requirement;
         this.behavior = behavior;
     }
 
-    public Topic(TopicID id, String topic, Requirement requirement) {
+    public Topic(TopicID id, String topic, TopicRequirement requirement) {
         this(id, topic, requirement, null);
     }
 
@@ -41,7 +41,7 @@ public class Topic{
         return topic;
     }
 
-    public Requirement getRequirement() {
+    public TopicRequirement getRequirement() {
         return requirement;
     }
 
@@ -51,6 +51,10 @@ public class Topic{
 
     public boolean isVisible() {
         return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public void setVisibleTrue() {

@@ -7,6 +7,8 @@ import java.util.function.Supplier;
 
 public class Button extends JButton {
     private final ButtonOption appearance;
+    private Color selectedBackground;
+    private Color selectedForeground;
 
     public Button(String text, ButtonOption appearance, Runnable onClick) {
         super(text);
@@ -53,6 +55,19 @@ public class Button extends JButton {
         setContentAreaFilled(false);
         setOpaque(false);
         setMargin(new Insets(0, 0, 0, 0));
+
+        setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    public void setSelectedState(boolean selected) {
+        if (selected) {
+            selectedBackground = Color.decode("#45BEFF");
+            selectedForeground = Color.BLACK;
+        } else {
+            selectedBackground = null;
+            selectedForeground = null;
+        }
+        repaint();
     }
 
     @Override
@@ -61,8 +76,12 @@ public class Button extends JButton {
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2.setFont(getFont());
 
-        g2.setColor(appearance.getBackground());
+        Color backgroundColor = selectedBackground != null ? selectedBackground : appearance.getBackground();
+        Color foregroundColor = selectedForeground != null ? selectedForeground : getForeground();
+
+        g2.setColor(backgroundColor);
         g2.fillRoundRect(
             0,
             0,
@@ -72,19 +91,20 @@ public class Button extends JButton {
             appearance.getCornerRadius()
         );
 
-        FontMetrics metrics = g2.getFontMetrics(getFont());
+        FontMetrics metrics = g2.getFontMetrics();
         String text = getText();
 
         int textWidth = metrics.stringWidth(text);
-        int textHeight = metrics.getAscent() - metrics.getDescent();
-
         int textX = (getWidth() - textWidth) / 2;
-        int textY = (getHeight() - textHeight) / 2 + metrics.getAscent();
+        int textY = (getHeight() - metrics.getAscent() - metrics.getDescent()) / 2 + metrics.getAscent();
 
-        g2.setColor(getForeground());
-        g2.setFont(getFont());
+        g2.setColor(foregroundColor);
         g2.drawString(text, textX, textY);
 
         g2.dispose();
+    }
+
+    public ButtonOption getAppearance() {
+        return appearance;
     }
 }

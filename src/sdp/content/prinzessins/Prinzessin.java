@@ -1,12 +1,17 @@
 package sdp.content.prinzessins;
 
 import sdp.content.gameplay.inventory.items.ItemID;
+import sdp.content.prinzessins.chiaki.assets.ChiakiSprite;
+import sdp.content.prinzessins.kazuha.assets.KazuhaSprite;
+import sdp.content.prinzessins.kyoko.assets.KyokoSprite;
+import sdp.content.prinzessins.tomoyo.assets.TomoyoSprite;
+import sdp.modules.assets.Asset;
 
 import static sdp.content.gameplay.inventory.items.ItemID.*;
 
 public enum Prinzessin {
     KYOKO(
-        "Kyoko Kirigiri", "Kyoko",
+        "Kyoko Kirigiri", "Kyoko", KyokoSprite.Resigned,
         30, 50, 100, 0,
         new ItemID[]{
             ITEM_01, ITEM_02, ITEM_03, ITEM_04, ITEM_05, ITEM_06, ITEM_07, ITEM_08, ITEM_09, ITEM_10,
@@ -16,7 +21,7 @@ public enum Prinzessin {
     ),
 
     CHIAKI(
-        "Chiaki Nanami", "Chiaki",
+        "Chiaki Nanami", "Chiaki", ChiakiSprite.Uncertain,
         30, 50, 100, 0,
         new ItemID[]{
             ITEM_01, ITEM_02, ITEM_03, ITEM_04, ITEM_05, ITEM_06, ITEM_07, ITEM_08, ITEM_09, ITEM_10,
@@ -26,7 +31,7 @@ public enum Prinzessin {
     ),
 
     KAZUHA(
-        "Kazuha Migiwa", "Kazuha",
+        "Kazuha Migiwa", "Kazuha", KazuhaSprite.Neutral,
         30, 50, 100, 0,
         new ItemID[]{
             ITEM_01, ITEM_02, ITEM_03, ITEM_04, ITEM_05, ITEM_06, ITEM_07, ITEM_08, ITEM_09, ITEM_10,
@@ -36,7 +41,7 @@ public enum Prinzessin {
     ),
 
     TOMOYO(
-        "Tomoyo Sakagami", "Tomoyo",
+        "Tomoyo Sakagami", "Tomoyo", TomoyoSprite.Neutral,
         30, 50, 100, 0,
         new ItemID[]{
             ITEM_01, ITEM_02, ITEM_03, ITEM_04, ITEM_05, ITEM_06, ITEM_07, ITEM_08, ITEM_09, ITEM_10,
@@ -48,7 +53,8 @@ public enum Prinzessin {
     // Identification
     private final String fullName;
     private final String nickname;
-
+    private final Asset initialSprite;
+    private final String selectSprite;
 
     // Initial Data
     private final int insanity;
@@ -57,9 +63,11 @@ public enum Prinzessin {
     private final long money;
     private final ItemID[] items;
 
-    Prinzessin(String fullName, String nickname, int insanity, int affection, int hunger, long money, ItemID[] items) {
+    Prinzessin(String fullName, String nickname, Asset selectSprite, int insanity, int affection, int hunger, long money, ItemID[] items) {
         this.fullName = fullName;
         this.nickname = nickname;
+        this.initialSprite = selectSprite;
+        this.selectSprite = selectSprite.getDirectory();
         this.insanity = insanity;
         this.affection = affection;
         this.hunger = hunger;
@@ -73,6 +81,14 @@ public enum Prinzessin {
 
     public String getNickname() {
         return nickname;
+    }
+
+    public String getSelectSprite() {
+        return selectSprite;
+    }
+
+    public Asset getInitialSprite() {
+        return initialSprite;
     }
 
     public int getInsanity() {

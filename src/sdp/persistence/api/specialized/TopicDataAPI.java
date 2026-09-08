@@ -1,4 +1,4 @@
-package sdp.persistence.api;
+package sdp.persistence.api.specialized;
 
 import sdp.content.gameplay.talk.topics.Topic;
 import sdp.content.gameplay.talk.topics.TopicID;

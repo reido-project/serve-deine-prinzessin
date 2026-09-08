@@ -1,5 +1,8 @@
 package sdp.content.prinzessins;
 
+import sdp.content.gameplay.story.StoryState;
+import sdp.content.prinzessins.kyoko.assets.config.KyokoBackground;
+import sdp.modules.assets.Asset;
 import sdp.modules.dialogue.interfaces.*;
 import sdp.content.gameplay.inventory.items.Item;
 import sdp.content.gameplay.talk.topics.Topic;
@@ -7,9 +10,12 @@ import sdp.content.prinzessins.kyoko.dialogues.*;
 import sdp.content.prinzessins.kyoko.items.KyokoItem;
 import sdp.content.prinzessins.kyoko.topics.KyokoTopic;
 
+import java.util.Map;
+
 public class PrinzessinAttributes {
     private final Item[] items;
     private final Topic[] topics;
+    private final Map<StoryState, Asset> backgrounds;
 
     private final StoryDialogueInterface storyDialogue;
     private final TalkDialogueInterface talkDialogue;
@@ -27,6 +33,7 @@ public class PrinzessinAttributes {
             case KYOKO -> {
                 items = KyokoItem.getItems();
                 topics = KyokoTopic.getTopics();
+                backgrounds = KyokoBackground.getBackgrounds();
 
                 storyDialogue = new KyokoStoryDialogue();
 
@@ -56,6 +63,10 @@ public class PrinzessinAttributes {
 
     public Topic[] getTopics() {
         return topics;
+    }
+
+    public Map<StoryState, Asset> getBackgrounds() {
+        return backgrounds;
     }
 
     public StoryDialogueInterface getStoryDialogue() {

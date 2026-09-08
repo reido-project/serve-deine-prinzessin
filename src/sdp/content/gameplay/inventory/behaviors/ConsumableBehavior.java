@@ -2,8 +2,8 @@ package sdp.content.gameplay.inventory.behaviors;
 
 import sdp.modules.behavior.Behavior;
 import sdp.content.gameplay.inventory.items.ItemID;
-import sdp.persistence.api.ConsumableBehaviorDataAPI;
-import sdp.persistence.api.ItemDataAPI;
+import sdp.persistence.api.specialized.ConsumableBehaviorDataAPI;
+import sdp.persistence.api.specialized.ItemDataAPI;
 import sdp.persistence.api.StatDataAPI;
 
 public abstract class ConsumableBehavior implements Behavior, ConsumableBehaviorDataAPI, ItemDataAPI, StatDataAPI {

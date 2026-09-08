@@ -1,7 +1,7 @@
 package sdp;
 
-import sdp.persistence.SessionController;
 import sdp.content.gameplay.InteractionController;
+import sdp.modules.dialogue.DialogueRunner;
 
 public class GameController {
     private GameController() {}
@@ -10,6 +10,7 @@ public class GameController {
 
     // Fields
     private final SessionController sessionController = new SessionController();
+    private final DialogueRunner dialogueRunner = new DialogueRunner();
     private InteractionController interactionController = null;
 
     // Initializations
@@ -32,5 +33,9 @@ public class GameController {
             initializeInteractionController();
         }
         return interactionController;
+    }
+
+    public DialogueRunner getDialogueRunner(){
+        return dialogueRunner;
     }
 }

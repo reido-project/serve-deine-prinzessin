@@ -10,10 +10,10 @@ import static sdp.modules.assets.AssetCategory.*;
 public interface AudioAPI {
 
     // Music
-    default void playMusic(Asset music) { AudioController.playMusic(music); saveState(MUSIC, music); }
-    default void playMusic(Asset music, Effects effect, long duration) { AudioController.playMusic(music, effect, duration); saveState(MUSIC, music); }
-    default void playMusic(int channel, Asset music) { AudioController.playMusic(channel, music); saveState(MUSIC, music); }
-    default void playMusic(int channel, Asset music, Effects effect, long duration) { AudioController.playMusic(channel, music, effect, duration); saveState(MUSIC, music); }
+    default void playMusic(Asset music) { if (checkMusicState(music)) return; AudioController.playMusic(music); saveState(MUSIC, music); }
+    default void playMusic(Asset music, Effects effect, long duration) { if (checkMusicState(music)) return; AudioController.playMusic(music, effect, duration); saveState(MUSIC, music); }
+    default void playMusic(int channel, Asset music) { if (checkMusicState(music)) return; AudioController.playMusic(channel, music); saveState(MUSIC, music); }
+    default void playMusic(int channel, Asset music, Effects effect, long duration) { if (checkMusicState(music)) return; AudioController.playMusic(channel, music, effect, duration); saveState(MUSIC, music); }
 
     default void stopMusic() { AudioController.stopMusic(); saveState(MUSIC, null); }
     default void stopMusic(Effects effect, long duration) { AudioController.stopMusic(effect, duration); saveState(MUSIC, null); }
@@ -56,6 +56,10 @@ public interface AudioAPI {
     default void stopAll(Effects effect, long duration) { AudioController.stopAll(effect, duration); saveState(MUSIC, null); saveState(VOICE, null); }
 
     // Special Permission
+    private boolean checkMusicState(Asset audio) {
+        return audio == DataController.getInstance().getPresentationData().getCurrentMusic();
+    }
+
     private void saveState(AssetCategory category, Asset asset) {
         PresentationData presentation = DataController.getInstance().getPresentationData();
         switch (category) {

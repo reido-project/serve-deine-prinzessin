@@ -9,7 +9,7 @@ import sdp.content.gameplay.inventory.items.Item;
 import sdp.content.gameplay.inventory.items.ItemID;
 import sdp.content.gameplay.inventory.items.ItemType;
 import sdp.content.gameplay.inventory.items.Preference;
-import sdp.persistence.api.ItemDataAPI;
+import sdp.persistence.api.specialized.ItemDataAPI;
 import sdp.persistence.persistent.dtos.InventoryDataDTO;
 
 import java.util.ArrayList;

@@ -7,13 +7,17 @@ import static java.awt.Color.*;
 public enum ButtonOption {
     // Relative to 1920x1080
 
-    HomeOption("Home Option", true, "#45BEFF", BLACK, 10, 50, 405, 100),
+    LargeButton("Home Option", true, "#45BEFF", BLACK, 10, 50, 405, 100),
     InteractionOption("Interaction Option", true, "#45BEFF", BLACK, 10, 30, 210, 45),
     ResolutionOption("Resolution Option", false, "#737373", WHITE, 10, 24, 176, 42),
     GameOption("Game Option", true, "#45BEFF", BLACK, 10, 24, 176, 42),
-    SubmitBtn("Submit", true, "#45BEFF", BLACK, 10, 20, 110, 45),
+    SmallButton("Submit", true, "#45BEFF", BLACK, 10, 20, 110, 45),
 
-    SettingBtn("Setting", true, "#6DFF70", BLACK, 10, 30, 210, 45);
+    StartBtn("Start", true, "#6DFF70", BLACK, 10, 50, 405, 100),
+
+    SettingBtn("Setting", true, "#6DFF70", BLACK, 10, 30, 210, 45),
+
+    CloseBtn("✕", true, new Color(0, 0, 0, 0), WHITE, 0, 35, 40, 40);
 
     private final String text;
     private final Font font;

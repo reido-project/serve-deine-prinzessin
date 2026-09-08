@@ -27,4 +27,12 @@ public interface PresentationDataAPI {
     default void setSprite(Asset sprite){
         DataController.getInstance().getPresentationData().setCurrentSprite(sprite);
     }
+
+    default Asset getBackground(){
+        return DataController.getInstance().getPresentationData().getCurrentBackground();
+    }
+
+    default void setBackground(Asset background){
+        DataController.getInstance().getPresentationData().setCurrentBackground(background);
+    }
 }

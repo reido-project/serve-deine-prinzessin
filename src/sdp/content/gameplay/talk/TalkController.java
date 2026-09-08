@@ -6,7 +6,7 @@ import sdp.content.gameplay.talk.behaviors.TopicBehavior;
 import sdp.content.gameplay.talk.behaviors.TalkBehavior;
 import sdp.content.gameplay.talk.topics.Topic;
 import sdp.content.gameplay.talk.topics.TopicID;
-import sdp.persistence.api.TopicDataAPI;
+import sdp.persistence.api.specialized.TopicDataAPI;
 import sdp.persistence.persistent.dtos.TopicDataDTO;
 
 import java.util.ArrayList;

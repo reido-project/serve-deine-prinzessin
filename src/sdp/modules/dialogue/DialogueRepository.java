@@ -46,6 +46,7 @@ public class DialogueRepository {
             case MAX_AFF_END -> storyDialogue.maxAffEnd();
             case NO_AFF_END -> storyDialogue.noAffEnd();
             case DEAD_END -> storyDialogue.deadEnd();
+            default -> throw new IllegalArgumentException("There is no dialogue for this state");
         };
     }
 
