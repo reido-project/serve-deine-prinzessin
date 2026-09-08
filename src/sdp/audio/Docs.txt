@@ -1,0 +1,54 @@
+=============================================================================================================================================================================
+CATEGORY   | METHOD                                      | EXAMPLE USAGE                                      | DESCRIPTION
+=============================================================================================================================================================================
+Music      | playMusic(MusicList music)                  | playMusic(MusicList.MUSIC)                         | Plays music on the default channel (channel 1).
+Music      | playMusic(MusicList music, Effects effect,  | playMusic(MusicList.MUSIC, Effects.FADE, 1000)     | Plays music on channel 1 with the specified effect.
+           | long duration)                              |                                                    |
+Music      | playMusic(int channel, MusicList music)     | playMusic(2, MusicList.MUSIC)                      | Plays music on the specified channel.
+Music      | playMusic(int channel, MusicList music,     | playMusic(2, MusicList.MUSIC, Effects.FADE, 1000)  | Plays music on the specified channel with the
+           | Effects effect, long duration)              |                                                    | specified effect.
+Music      | stopMusic()                                 | stopMusic()                                        | Stops music on the default channel (channel 1).
+Music      | stopMusic(Effects effect, long duration)    | stopMusic(Effects.FADE, 1000)                      | Stops music on channel 1 with the specified effect.
+Music      | stopMusic(int channel)                      | stopMusic(2)                                       | Stops music on the specified channel.
+Music      | stopMusic(int channel, Effects effect,      | stopMusic(2, Effects.FADE, 1000)                   | Stops music on the specified channel with the
+           | long duration)                              |                                                    | specified effect.
+Music      | stopAllMusic()                              | stopAllMusic()                                     | Immediately stops music on all registered channels.
+Music      | stopAllMusic(Effects effect, long duration) | stopAllMusic(Effects.FADE, 1000)                   | Stops music on all registered channels with the
+           |                                             |                                                    | specified effect.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Sfx        | playSfx(SfxList sfx)                        | playSfx(SfxList.SFX)                               | Plays SFX on the default channel (channel 1).
+Sfx        | playSfx(SfxList sfx, Effects effect,        | playSfx(SfxList.SFX, Effects.FADE, 1000)           | Plays SFX on channel 1 with the specified effect.
+           | long duration)                              |                                                    |
+Sfx        | playSfx(int channel, SfxList sfx)           | playSfx(2, SfxList.SFX)                            | Plays SFX on the specified channel.
+Sfx        | playSfx(int channel, SfxList sfx, Effects   | playSfx(2, SfxList.SFX, Effects.FADE, 1000)        | Plays SFX on the specified channel with the
+           | effect, long duration)                      |                                                    | specified effect.
+Sfx        | stopSfx()                                   | stopSfx()                                          | Stops SFX on the default channel (channel 1).
+Sfx        | stopSfx(Effects effect, long duration)      | stopSfx(Effects.FADE, 1000)                        | Stops SFX on channel 1 with the specified effect.
+Sfx        | stopSfx(int channel)                        | stopSfx(2)                                         | Stops SFX on the specified channel.
+Sfx        | stopSfx(int channel, Effects effect,        | stopSfx(2, Effects.FADE, 1000)                     | Stops SFX on the specified channel with the
+           | long duration)                              |                                                    | specified effect.
+Sfx        | stopAllSfx()                                | stopAllSfx()                                       | Immediately stops SFX on all registered channels.
+Sfx        | stopAllSfx(Effects effect, long duration)   | stopAllSfx(Effects.FADE, 1000)                     | Stops SFX on all registered channels with the
+           |                                             |                                                    | specified effect.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Voice      | playVoice(VoiceList voice)                  | playVoice(VoiceList.VOICE)                         | Plays voice audio on the default channel (channel 1).
+Voice      | playVoice(VoiceList voice, Effects effect,  | playVoice(VoiceList.VOICE, Effects.FADE, 1000)     | Plays voice audio on channel 1 with the specified effect.
+           | long duration)                              |                                                    |
+Voice      | playVoice(int channel, VoiceList voice)     | playVoice(2, VoiceList.VOICE)                      | Plays voice audio on the specified channel.
+Voice      | playVoice(int channel, VoiceList voice,     | playVoice(2, VoiceList.VOICE, Effects.FADE, 1000)  | Plays voice audio on the specified channel with the
+           | Effects effect, long duration)              |                                                    | specified effect.
+Voice      | stopVoice()                                 | stopVoice()                                        | Stops voice audio on the default channel (channel 1).
+Voice      | stopVoice(Effects effect, long duration)    | stopVoice(Effects.FADE, 1000)                      | Stops voice audio on channel 1 with the specified effect.
+Voice      | stopVoice(int channel)                      | stopVoice(2)                                       | Stops voice audio on the specified channel.
+Voice      | stopVoice(int channel, Effects effect,      | stopVoice(2, Effects.FADE, 1000)                   | Stops voice audio on the specified channel with the
+           | long duration)                              |                                                    | specified effect.
+Voice      | stopAllVoice()                              | stopAllVoice()                                     | Immediately stops voice audio on all registered channels.
+Voice      | stopAllVoice(Effects effect, long duration) | stopAllVoice(Effects.FADE, 1000)                   | Stops voice audio on all registered channels with the
+           |                                             |                                                    | specified effect.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Global     | stopAll()                                   | stopAll()                                          | Immediately stops music, SFX, and voice audio.
+Global     | stopAll(Effects effect, long duration)      | stopAll(Effects.FADE, 1000)                        | Stops music, SFX, and voice audio with the specified
+           |                                             |                                                    | effect.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Cleanup    | dispose()                                   | dispose()                                          | Disposes all registered music, SFX, and voice channels.
+=============================================================================================================================================================================
