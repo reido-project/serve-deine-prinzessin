@@ -31,4 +31,5 @@ bin/
 .DS_Store
 
 ### App ###
-docs/
+docs/hidden/
+META-INF/
