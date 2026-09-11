@@ -2,11 +2,9 @@
 
 > **A small Java CLI dating / interaction game with ASCII art, dialogue, gifts, and questionable life decisions. 😂**
 
+![Hero](docs/hero.png)
+
 **Serve Deine Prinzessin** is a simple command-line game where you interact with a character through dialogue and several activities.
-
-This repository contains the **CLI version** of the game — the simplest version of *Serve Deine Prinzessin*.
-
-The game is intentionally built around a lightweight Java architecture with no external dependencies.
 
 ---
 
@@ -20,13 +18,11 @@ Currently, the only available character is:
 
 Once the interaction begins, you can:
 
-| Action   | Key | Description                                        |
-| -------- | --- | -------------------------------------------------- |
-| 🎁 Gift  | `G` | Give Kyoko an item                                 |
-| 😏 Tease | `T` | Tease Kyoko and trigger a random dialogue sequence |
-| 🍴 Feed  | `F` | Feed the current character                         |
-
-The game uses dialogue and character states to determine which ASCII sprite is displayed.
+| Action   | Key | Description                                        | Status                |
+| -------- | --: | -------------------------------------------------- | --------------------- |
+| 🎁 Gift  | `G` | Open the inventory and give Kyoko an item          | ✅ Functional          |
+| 😏 Tease | `T` | Tease Kyoko and trigger a random dialogue sequence | ✅ Functional          |
+| 🍴 Feed  | `F` | Feed the current character                         | 🚧 Not functional yet |
 
 ---
 
@@ -38,11 +34,13 @@ Character sprites are rendered using **ASCII art**, while dialogue is displayed 
 
 ### Screenshots
 
-#### Home / Character Interaction
-
 #### Dialogue
 
-#### Gift Selection
+![Dialogue](docs/dialogue.PNG)
+
+#### Gift Selection (Inventory)
+
+![Gift](docs/gift.PNG)
 
 ---
 
@@ -54,8 +52,6 @@ Character sprites are rendered using **ASCII art**, while dialogue is displayed 
 * 🎲 Randomized dialogue responses
 * 🎁 Gift system with different reactions
 * 😏 Teasing interaction
-* 🍴 Feeding interaction
-* ❤️ Character affection system
 * 🎭 Character states with different ASCII sprites
 * ⌨️ Fully keyboard-driven CLI gameplay
 * ☕ Written in Java
@@ -87,7 +83,7 @@ Example:
 Select Gift:
 ```
 
-The character's response depends on the item's impact.
+The character's response depends on the selected item's effect.
 
 Possible reactions include:
 
@@ -111,198 +107,9 @@ Both are then displayed as a dialogue sequence.
 
 ### Feed
 
-Press `F` to feed the current character.
+Press `F` to select the feeding interaction.
 
----
-
-## 🧩 Project Structure
-
-```text
-.
-├── docs/
-│   ├── dialogue.PNG
-│   ├── gift.PNG
-│   ├── hero.png
-│   └── hidden/
-│       └── note.txt
-│
-├── src/
-│   ├── com/
-│   │   └── nub/
-│   │       └── app/
-│   │           ├── AppController.java
-│   │           ├── AppState.java
-│   │           ├── Main.java
-│   │           ├── UI.java
-│   │           │
-│   │           ├── dialogues/
-│   │           │   ├── CharacterState.java
-│   │           │   ├── Dialogue.java
-│   │           │   ├── DialogueBank.java
-│   │           │   └── KyokoDialogue.java
-│   │           │
-│   │           ├── misc/
-│   │           │   ├── ItemList.java
-│   │           │   └── Items.java
-│   │           │
-│   │           └── models/
-│   │               ├── Characters.java
-│   │               ├── Kyoko.java
-│   │               ├── KyokoSprite.java
-│   │               └── Player.java
-│   │
-│   └── META-INF/
-│       └── MANIFEST.MF
-│
-├── Serve Deine Prinzessin.jar
-├── README.md
-└── .gitignore
-```
-
-### Main Components
-
-#### `AppController`
-
-The main game controller.
-
-It handles:
-
-* Game states
-* Character selection
-* Gameplay input
-* Dialogue flow
-* Gift interactions
-* Teasing
-* Feeding
-
-#### `AppState`
-
-Defines the current state of the game.
-
-The current flow consists of states such as:
-
-```text
-HOME
-  ↓
-CHARSELECT
-  ↓
-IDLE
-  ├── INVENTORY
-  └── EXIT
-```
-
-#### `dialogues/`
-
-Contains the dialogue system and character-specific dialogue.
-
-`KyokoDialogue` contains Kyoko's dialogue bank, including:
-
-* Prologue
-* Gift reactions
-* Tease dialogue
-* Tease responses
-
-#### `models/`
-
-Contains the game's core models.
-
-This includes:
-
-* `Player`
-* `Characters`
-* `Kyoko`
-* `KyokoSprite`
-
-`KyokoSprite` is responsible for the ASCII-art representation of Kyoko.
-
-#### `misc/`
-
-Contains item-related classes used by the gift system.
-
----
-
-## 🏗️ Architecture
-
-The CLI version uses a simple state-driven architecture.
-
-```text
-                 ┌─────────────┐
-                 │    HOME     │
-                 └──────┬──────┘
-                        │
-                        ▼
-                 ┌─────────────┐
-                 │ CHARSELECT  │
-                 └──────┬──────┘
-                        │
-                        ▼
-                 ┌─────────────┐
-                 │    IDLE     │
-                 └──────┬──────┘
-                        │
-          ┌─────────────┼─────────────┐
-          ▼             ▼             ▼
-       [ G ]          [ T ]         [ F ]
-          │             │             │
-          ▼             ▼             ▼
-      Inventory       Tease          Feed
-          │             │             │
-          └─────────────┴─────────────┘
-                        │
-                        ▼
-                       IDLE
-```
-
-Dialogue is represented through the `Dialogue` model and contains information such as:
-
-* Speaker
-* Dialogue line
-* Character state
-
-The controller then uses the character state to select and render the appropriate ASCII sprite.
-
----
-
-## 🎭 Character States
-
-Characters can have different states during dialogue.
-
-For example:
-
-```text
-NEUTRAL
-```
-
-The character's current state determines which sprite is displayed before the dialogue line.
-
-This makes it possible to expand the game later with additional expressions and emotional states.
-
----
-
-## 🎁 Gift System
-
-Each character has an item list containing gifts with different impacts.
-
-An item's impact determines which dialogue pool is selected.
-
-```text
-Item Impact
-    │
-    ├──  2  → Satisfied
-    ├──  1  → Likes
-    ├──  0  → Neutral
-    └── -3  → Disappointed
-```
-
-The exact response is randomized from the corresponding dialogue pool.
-
----
-
-## ❤️ Affection
-
-Characters have an affection value that can be modified through interactions.
-
-The current CLI version keeps this system intentionally simple, but it provides a foundation for future gameplay mechanics.
+This feature is currently displayed in the menu but is **not functional yet**.
 
 ---
 
@@ -333,13 +140,7 @@ git clone <repository-url>
 cd <repository-directory>
 ```
 
-Then open the project using an IDE such as IntelliJ IDEA.
-
-Run:
-
-```text
-com.nub.app.Main
-```
+Then open the project using an IDE such as IntelliJ IDEA and run the main application.
 
 ---
 
@@ -360,24 +161,6 @@ The CLI version is built entirely using the Java standard library.
 
 ---
 
-## 📝 Development Notes
-
-This project started as a small random Java project and gradually evolved into a game.
-
-The CLI version focuses on experimenting with:
-
-* Object-oriented programming
-* State management
-* Dialogue systems
-* Basic game architecture
-* Randomized interactions
-* Character models
-* ASCII-based rendering
-
-It is intentionally small and straightforward.
-
----
-
 ## 🔮 Future Versions
 
 *Serve Deine Prinzessin* is planned as a multi-version project.
@@ -386,15 +169,15 @@ The **CLI version** is the simplest implementation and serves as the foundation 
 
 Possible future improvements include:
 
-* [ ] More characters
-* [ ] More character states / expressions
-* [ ] More gifts
-* [ ] Expanded dialogue
-* [ ] More interaction types
-* [ ] More meaningful affection mechanics
-* [ ] Save / load system
-* [ ] Graphical interface
-* [ ] Additional game content
+* More characters
+* More character states and expressions
+* More gifts
+* Expanded dialogue
+* Functional feeding interaction
+* More interaction types
+* Save / load system
+* Graphical interface
+* Additional game content
 
 ---
 
