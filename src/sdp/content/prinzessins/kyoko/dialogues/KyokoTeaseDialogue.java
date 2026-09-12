@@ -31,7 +31,11 @@ public class KyokoTeaseDialogue extends DialogueBank implements TeaseDialogueInt
 
     @Override
     public Dialogue[] hatesHungryVeryHungry() {
-        return new Dialogue[0];
+        return new Dialogue[]{
+            p("I am starving, irritable, and have zero patience left for your foolishness.", Pissed),
+            p("Get out of my sight before I make you regret ever speaking to me."),
+            n("EEEEEK! SHE'S GONNA KILL ME!")
+        };
     }
 
     public Dialogue[] hates() {
@@ -63,7 +67,11 @@ public class KyokoTeaseDialogue extends DialogueBank implements TeaseDialogueInt
 
     @Override
     public Dialogue[] dislikesHungryVeryHungry() {
-        return new Dialogue[0];
+        return new Dialogue[]{
+            p("I am far too hungry to entertain your brainless antics.", Pissed),
+            p("Unless you're holding a meal, save your breath."),
+            n("Aaaah... She's even colder when her stomach is empty!")
+        };
     }
 
     public Dialogue[] dislikes() {
@@ -92,7 +100,11 @@ public class KyokoTeaseDialogue extends DialogueBank implements TeaseDialogueInt
 
     @Override
     public Dialogue[] neutralHungryVeryHungry() {
-        return new Dialogue[0];
+        return new Dialogue[]{
+            p("I really don't have the energy for this right now.", Indifferent),
+            p("I'm hungry. Please stop making things more complicated than they need to be."),
+            n("Okay okay... food first, teasing later.")
+        };
     }
 
     public Dialogue[] neutral() {
@@ -123,7 +135,11 @@ public class KyokoTeaseDialogue extends DialogueBank implements TeaseDialogueInt
 
     @Override
     public Dialogue[] likesHungryVeryHungry() {
-        return new Dialogue[0];
+        return new Dialogue[]{
+            p("I appreciate that you're trying to lighten the mood...", Resigned),
+            p("...But my blood sugar is dropping. Can we please focus on getting food first?", Indifferent),
+            n("Guess i'll have to cook for meine Prinzessin now >//<")
+        };
     }
 
     public Dialogue[] likes() {
@@ -155,7 +171,11 @@ public class KyokoTeaseDialogue extends DialogueBank implements TeaseDialogueInt
 
     @Override
     public Dialogue[] lovesVeryHungry() {
-        return new Dialogue[0];
+        return new Dialogue[]{
+            p("I don't mind your teasing. Really.", Resigned),
+            p("But I'm starving, and I would genuinely appreciate something to eat right now.", Shy),
+            n("SHE ADMITTED SHE NEEDS ME!!!")
+        };
     }
 
     public Dialogue[] loves() {

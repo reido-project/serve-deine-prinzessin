@@ -3,6 +3,7 @@ package sdp.content.prinzessins.kyoko.assets;
 import sdp.modules.assets.Asset;
 
 public enum KyokoSprite implements Asset {
+    Hide,
 
     // A
     Asserting,
